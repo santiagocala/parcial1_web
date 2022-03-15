@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
 .btn-primary {
-    color:white;
-    background-color: #333a40;
+    color: black;
+    background-color: orange;
     border-color: #333a40;
+}
+.card{
+    padding: 14px;
+    border-color: #333a40;
+}
+#columnatarjeta{
+    padding: 14px;
 }
 #carrito {
     height: 50px;

@@ -33,7 +33,7 @@ promise3.then(function(info){
         categoria.appendChild(nodo);
         contenedor_categorias.appendChild(categoria);
         categoria.addEventListener('click',function(){
-            categoria_actual.innerHTML = datos[i].name;
+            categoria_actual.innerHTML = datos[i].name.toUpperCase();
             contenedor_productos.innerHTML = '';
             for(let j = 0; j < datos[i].products.length; j++){
                 contenedor_productos.appendChild(createCard(datos[i].products[j]));
@@ -45,7 +45,8 @@ promise3.then(function(info){
 let createCard = (pProducto) => {
 
     let columna = document.createElement('div');
-    columna.className = 'col-3';
+    columna.className = 'col-md-3 col-sm-6';
+    columna.id = 'columnatarjeta'; 
 
     let card = document.createElement('div');
     card.className = 'card h-100 shadow cursor-pointer';
@@ -60,14 +61,17 @@ let createCard = (pProducto) => {
   
     let title = document.createElement('h5');
     title.innerText = pProducto.name;
-    title.className = 'card-title';
+    title.className = 'card-title text-center';
     
     let description = document.createElement('p');
     description.innerText = pProducto.description;
     description.className = 'card-text';
     
+    let cont = document.createElement('div');
+    cont.className = 'text-center';
+
     let boton = document.createElement('a');
-    boton.className = 'btn btn-primary'; 
+    boton.className = 'btn btn-primary text-center'; 
     boton.innerText = 'Add to cart';
     boton.addEventListener('click', function(){
         agregarAlCarrito(pProducto);
@@ -80,7 +84,8 @@ let createCard = (pProducto) => {
     cardBody.appendChild(title);
     cardBody.appendChild(description);
     cardBody.appendChild(precio);
-    cardBody.appendChild(boton);
+    cardBody.appendChild(cont);
+    cont.appendChild(boton);
     card.appendChild(image);
     card.appendChild(cardBody);
     columna.appendChild(card);
