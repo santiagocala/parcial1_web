@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+.btn-primary {
+    color:white;
+    background-color: #333a40;
+    border-color: #333a40;
+}
+#carrito {
+    height: 50px;
+    width: 50px;
+}
+#items {
+    vertical-align: middle;
+}
+#titulo {
+    font-family: Satisfy;
+}
+#contenedor-categorias {
+    font-size: 11px;
+    color: white;
+    background-color: #333a40;
+    padding: 14px;
+}
