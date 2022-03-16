@@ -80,7 +80,7 @@ let createCard = (pProducto) => {
   
     let title = document.createElement('h5');
     title.innerText = pProducto.name;
-    title.className = 'card-title text-center';
+    title.className = 'card-title text-center nombres';
     
     let description = document.createElement('p');
     description.innerText = pProducto.description;

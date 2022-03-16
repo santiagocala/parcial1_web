@@ -3,11 +3,15 @@
 .btn-primary {
     color: black;
     background-color: orange;
-    border-color: #333a40;
+    border-color: lightgray;
 }
 .card{
     padding: 14px;
-    border-color: #333a40;
+    border-color: lightgray;
+}
+.nombres{
+    font-weight: bolder;
+    font-size: x-large;
 }
 #columnatarjeta{
     padding: 14px;
