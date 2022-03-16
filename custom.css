@@ -13,8 +13,15 @@
     font-weight: bolder;
     font-size: x-large;
 }
+hr.linea{
+    border-top: 1px black;
+}
 #columnatarjeta{
     padding: 14px;
+}
+#zonagris {
+    background-color: lightgray;
+    border-color: gray;
 }
 #carrito {
     height: 50px;

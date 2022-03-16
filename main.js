@@ -51,6 +51,7 @@ promise3.then(function(info){
             }
         });
 
+        // Agregamos los EventListeners a los elementos del dropdown de móvil
         categoria_mov.addEventListener('click', function(){
             categoria_actual_movil.innerHTML = datos[i].name;
             contenedor_productos.innerHTML = ''; 
@@ -60,6 +61,7 @@ promise3.then(function(info){
         }); 
     }
 });
+
 //Creamos la función para crear las tarjetas
 let createCard = (pProducto) => {
 
@@ -111,20 +113,56 @@ let createCard = (pProducto) => {
 
     return columna;
   }
+
 // Creamos la función para agregar al carrito
 let agregarAlCarrito = (pProducto) => {
     carrito.push(pProducto);
     items.innerHTML = carrito.length + ' items';
 }
+
 // Creamos el eventListener del carrito para desplegar la información cuando hagan click. 
 elementoCarrito.addEventListener('click', function(){
     contenedor_productos.innerHTML = ''
     categoria_actual.innerHTML = 'Order detail';
     mostrarOrden();
 })
+
+// Función que cuenta cuántos productos en el carrito hay de un tipo dado por el nombre
+function contarProductos(nombre){
+    let numeroProductos = 0; 
+    for(let i = 0; i<carrito.length; i++){
+        if(carrito[i].name == nombre){
+            numeroProductos ++;
+        }
+    }
+    console.log('numero de Productos', nombre, numeroProductos); 
+    return numeroProductos; 
+}
+
 // Creamos la tabla de productos que actualmente hay en el carrito
 function mostrarOrden(){
-    // Creamos la tabla: 
+    // Creamos la tabla para movil
+    let contenedor_movil = document.createElement('div');
+    contenedor_movil.className = 'd-block d-sm-none zonagris';
+    contenedor_productos.appendChild(contenedor_movil); 
+    for(let i = 0; i < carrito.length; i = i + contarProductos(carrito[i].name)){
+        // Creamos la fila del producto
+        let fila = document.createElement('div');
+        fila.className = 'row';
+        let col_cantidad = document.createElement('div');
+        col_cantidad.className = 'col-2';
+        col_cantidad.innerHTML = contarProductos(carrito[i].name);
+        let col_nombre = document.createElement('div');
+        col_nombre.className = 'col 8';
+        col_nombre.innerHTML = carrito[i].name;
+        fila.appendChild(col_cantidad);
+        fila.appendChild(col_nombre);
+        contenedor_movil.appendChild(fila);
+    }
+
+    // Creamos la tabla para desktop 
+    let contenedor_desktop = document.createElement('div');
+    contenedor_desktop.className = 'd-none d-sm-block';
     let tabla = document.createElement('table');
     tabla.className = 'table table-striped';
     let thead = document.createElement('thead');
@@ -148,8 +186,6 @@ function mostrarOrden(){
     th6.setAttribute('scope','col');
     th6.innerHTML = 'Description';
     let tbody = document.createElement('tbody');
-
-
     row.appendChild(th1);
     row.appendChild(th2);
     row.appendChild(th6);
@@ -159,25 +195,18 @@ function mostrarOrden(){
     tabla.appendChild(row);
     tabla.appendChild(thead);
     tabla.appendChild(tbody);
-    contenedor_productos.appendChild(tabla);
-
-    carrito.sort(function(a,b){
-        let fa = a.name.toLowerCase();
-        let fb = b.name.toLowerCase();
-
-    if (fa < fb) {
-        return -1;
-    }
-    if (fa > fb) {
-        return 1;
-    }
-    return 0;
-    });
+    contenedor_desktop.appendChild(tabla);
+    contenedor_productos.appendChild(contenedor_desktop);
+    
+    //Organizamos el carrito en orden alfabético para poder agruparlos en caso de que ya exista un producto igual
+    ordenarCarrito(); 
 
     let cantidad = 1;
     let prod = 1;
+    // Para cada elemento en el carrito, vamos dibujando una fila en la tabla.
     for(let i = 0; i < carrito.length; i++){
         if(i == carrito.length -1){
+            // Creamos la fila y los elementos internos
             let prow = document.createElement('tr');
             let numitem = document.createElement('th');
             numitem.innerHTML = prod;
@@ -190,13 +219,16 @@ function mostrarOrden(){
             let pamount = document.createElement('td');
             pamount.innerHTML = cantidad * carrito[i].price;
             let pmodify = document.createElement('td');
+            // Creamos el botón para sumar
             let sumar = document.createElement('button');
             sumar.className = 'btn btn-dark';
             sumar.innerHTML = '+';
             copia = carrito[i];
+            // Agregamos un eventListener que agrega una copia del elemento dentro del carrito. 
             sumar.addEventListener('click', function(){
                 contenedor_productos.innerHTML = '';
                 carrito.push(copia);
+                ordenarCarrito(); 
                 orden = []
                 mostrarOrden();
             })
@@ -274,6 +306,21 @@ function mostrarOrden(){
         } else {
             cantidad ++; 
         }
+    }
+
+    // Función para ordenar el carrito
+    function ordenarCarrito(){
+        carrito.sort(function(a,b){
+            let fa = a.name.toLowerCase();
+            let fb = b.name.toLowerCase();
+            if (fa < fb) {
+                return -1;
+            }
+            if (fa > fb) {
+                return 1;
+            }
+            return 0;
+        });
     }
 
     ultimafila.innerHTML = '';
