@@ -16,6 +16,17 @@
     height: 50px;
     width: 50px;
 }
+#categoria-actual-movil{
+    font-weight: bold;
+}
+#btn-dropdown{
+    background-color: orange;
+    border-color: orange;
+}
+#barra{
+    background-color: orange;
+    padding: 14px;
+}
 #items {
     vertical-align: middle;
 }

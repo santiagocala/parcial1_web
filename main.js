@@ -2,8 +2,10 @@ let datos;
 let carrito = [];
 let orden = [];
 const contenedor_categorias = document.getElementById('contenedor-categorias');
+const contenedor_categorias_movil = document.getElementById('contenedor-categorias-movil');
 const contenedor_productos = document.getElementById('contenedor-productos');
 const categoria_actual = document.getElementById('categoria-actual');
+const categoria_actual_movil = document.getElementById('categoria-actual-movil');
 const items = document.getElementById('items');
 const elementoCarrito = document.getElementById('carrito');
 const ultimafila = document.getElementById('ultimafila');
@@ -27,11 +29,20 @@ let promise3 = promise2.then(function(resFinal){
 // Ahora llenamos la información del HTML con base en los datos
 promise3.then(function(info){
     for(let i = 0; i < datos.length; i++){
+        //Creamos las categorías de desktop
         let categoria = document.createElement('div');
         categoria.className = 'col-1 categorias';
         let nodo = document.createTextNode(datos[i].name);
         categoria.appendChild(nodo);
         contenedor_categorias.appendChild(categoria);
+
+        // Creamos las categorías de móvil
+        let categoria_mov = document.createElement('a');
+        categoria_mov.className = 'dropdown-item';
+        categoria_mov.innerHTML = datos[i].name;
+        contenedor_categorias_movil.appendChild(categoria_mov); 
+
+        // Agregamos los EventListeners a los botones de desktop
         categoria.addEventListener('click',function(){
             categoria_actual.innerHTML = datos[i].name.toUpperCase();
             contenedor_productos.innerHTML = '';
@@ -39,6 +50,14 @@ promise3.then(function(info){
                 contenedor_productos.appendChild(createCard(datos[i].products[j]));
             }
         });
+
+        categoria_mov.addEventListener('click', function(){
+            categoria_actual_movil.innerHTML = datos[i].name;
+            contenedor_productos.innerHTML = ''; 
+            for(let j = 0; j < datos[i].products.length; j++){
+                contenedor_productos.appendChild(createCard(datos[i].products[j]));
+            }
+        }); 
     }
 });
 //Creamos la función para crear las tarjetas
