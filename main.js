@@ -135,31 +135,78 @@ function contarProductos(nombre){
             numeroProductos ++;
         }
     }
-    console.log('numero de Productos', nombre, numeroProductos); 
     return numeroProductos; 
+}
+function restarProducto(nombre){
+    let indice = -1;
+    for(let i = 0; i<carrito.length; i++){
+        if(carrito[i].name == nombre){
+            indice = i;
+        }
+    }
+    carrito.splice(indice,1);
+    if(indice == -1){
+        console.log('El elemento que está tratando de borrar no está en el carrito'); 
+    }
 }
 
 // Creamos la tabla de productos que actualmente hay en el carrito
 function mostrarOrden(){
     // Creamos la tabla para movil
     let contenedor_movil = document.createElement('div');
-    contenedor_movil.className = 'd-block d-sm-none zonagris';
-    contenedor_productos.appendChild(contenedor_movil); 
+    contenedor_movil.className = 'd-block d-sm-none';
+    contenedor_movil.setAttribute('id','zonagris');
+    let contenedorcito = document.createElement('div');
+    contenedorcito.className = 'row';
+    contenedor_productos.appendChild(contenedorcito); 
+    contenedorcito.appendChild(contenedor_movil);
     for(let i = 0; i < carrito.length; i = i + contarProductos(carrito[i].name)){
         // Creamos la fila del producto
         let fila = document.createElement('div');
         fila.className = 'row';
+        // Creamos las columnas con la información del producto
         let col_cantidad = document.createElement('div');
         col_cantidad.className = 'col-2';
         col_cantidad.innerHTML = contarProductos(carrito[i].name);
         let col_nombre = document.createElement('div');
-        col_nombre.className = 'col 8';
+        col_nombre.className = 'col-6';
         col_nombre.innerHTML = carrito[i].name;
+        // Creamos botón de sumar
+        let col_boton_plus = document.createElement('div');
+        col_boton_plus.className = 'col-1';
+        let sumar_movil = document.createElement('button');
+        sumar_movil.className = 'btn boton-movil'; 
+        sumar_movil.innerHTML = '+';
+        // Creamos botón de restar
+        let col_boton_minus = document.createElement('div');
+        col_boton_minus.className = 'col-1';
+        let restar_movil = document.createElement('button');
+        restar_movil.className = 'btn boton-movil'; 
+        restar_movil.innerHTML = '-';
+        // Agregamos los EventListeners
+        sumar_movil.addEventListener('click', function(){
+            contenedor_productos.innerHTML = '';
+            carrito.push(carrito[i]);
+            ordenarCarrito(); 
+            orden = []
+            items.innerHTML = carrito.length + 'items';
+            mostrarOrden();
+        });
+        restar_movil.addEventListener('click',function(){
+            contenedor_productos.innerHTML = ''; 
+            restarProducto(carrito[i].name);
+            items.innerHTML = carrito.length + 'items';
+            mostrarOrden();
+        });
         fila.appendChild(col_cantidad);
         fila.appendChild(col_nombre);
+        fila.appendChild(col_boton_plus);
+        fila.appendChild(col_boton_minus);
+        col_boton_plus.appendChild(sumar_movil);
+        col_boton_minus.appendChild(restar_movil); 
         contenedor_movil.appendChild(fila);
     }
-
+    
     // Creamos la tabla para desktop 
     let contenedor_desktop = document.createElement('div');
     contenedor_desktop.className = 'd-none d-sm-block';
@@ -201,6 +248,64 @@ function mostrarOrden(){
     //Organizamos el carrito en orden alfabético para poder agruparlos en caso de que ya exista un producto igual
     ordenarCarrito(); 
 
+    /*
+    let prod = 1;
+    for(let i = 0; i < carrito.length; i = i + contarProductos(carrito[i].name)){
+        // Creamos la fila del producto
+        let prow = document.createElement('tr');
+        let numitem = document.createElement('th');
+        numitem.innerHTML = prod;
+        let pqty = document.createElement('td');
+        pqty.innerHTML = contarProductos(carrito[i].name);
+        let pdesc = document.createElement('td');
+        pdesc.innerHTML = carrito[i].name;
+        let punitprice = document.createElement('td');
+        punitprice.innerHTML = carrito[i].price;
+        let pamount = document.createElement('td');
+        pamount.innerHTML = contarProductos(carrito[i].name) * carrito[i].price;
+        let pmodify = document.createElement('td');
+        // Creamos botón de sumar
+        let col_boton_plus = document.createElement('div');
+        col_boton_plus.className = 'col-1';
+        let sumar_movil = document.createElement('button');
+        sumar_movil.className = 'btn boton-movil'; 
+        sumar_movil.innerHTML = '+';
+        // Creamos botón de restar
+        let col_boton_minus = document.createElement('div');
+        col_boton_minus.className = 'col-1';
+        let restar_movil = document.createElement('button');
+        restar_movil.className = 'btn boton-movil'; 
+        restar_movil.innerHTML = '-';
+        // Agregamos los EventListeners
+        sumar_movil.addEventListener('click', function(){
+            contenedor_productos.innerHTML = '';
+            carrito.push(carrito[i]);
+            ordenarCarrito(); 
+            orden = []
+            items.innerHTML = carrito.length + 'items';
+            mostrarOrden();
+        });
+        restar_movil.addEventListener('click',function(){
+            contenedor_productos.innerHTML = ''; 
+            restarProducto(carrito[i].name);
+            items.innerHTML = carrito.length + 'items';
+            mostrarOrden();
+        });
+        pmodify.appendChild(sumar_movil);
+        pmodify.appendChild(restar_movil);
+        
+        tbody.appendChild(prow);
+        prow.appendChild(numitem);
+        prow.appendChild(pqty);
+        prow.appendChild(pdesc);
+        prow.appendChild(punitprice);
+        prow.appendChild(pamount);
+        prow.appendChild(pmodify);
+        elementoOrden = {item: prod, quantity: cantidad, description: carrito[i].name, unitPrice: carrito[i].price }
+        orden.push(elementoOrden);
+        prod ++;
+    }
+    */
     let cantidad = 1;
     let prod = 1;
     // Para cada elemento en el carrito, vamos dibujando una fila en la tabla.
@@ -221,13 +326,12 @@ function mostrarOrden(){
             let pmodify = document.createElement('td');
             // Creamos el botón para sumar
             let sumar = document.createElement('button');
-            sumar.className = 'btn btn-dark';
+            sumar.className = 'btn btn-dark boton-movil';
             sumar.innerHTML = '+';
-            copia = carrito[i];
             // Agregamos un eventListener que agrega una copia del elemento dentro del carrito. 
             sumar.addEventListener('click', function(){
                 contenedor_productos.innerHTML = '';
-                carrito.push(copia);
+                carrito.push(carrito[i]);
                 ordenarCarrito(); 
                 orden = []
                 mostrarOrden();
@@ -284,9 +388,19 @@ function mostrarOrden(){
             restar.className = 'btn btn-dark';
             restar.innerHTML = '-';
             restar.addEventListener('click', function(){
-                carrito.splice(carrito[i]);
+                contenedor_productos.innerHTML = '';
+                restarProducto(carrito[i].name);
+                items.innerHTML = carrito.length + 'items';
                 mostrarOrden();
             })
+            /*
+            restar_movil.addEventListener('click',function(){
+                contenedor_productos.innerHTML = ''; 
+                restarProducto(carrito[i].name);
+                items.innerHTML = carrito.length + 'items';
+                mostrarOrden();
+            });
+            */
             pmodify.appendChild(sumar);
             pmodify.appendChild(restar);
 
@@ -331,7 +445,7 @@ function mostrarOrden(){
     for(let i = 0; i < carrito.length; i++){
         valortotal += carrito[i].price;
     }
-    totalito.innerHTML = 'Total: $' + valortotal;
+    totalito.innerHTML = 'Total: $' + parseFloat(valortotal).toFixed(2);
     
     let colcancel = document.createElement('div');
     colcancel.className = 'col-2';
@@ -341,8 +455,8 @@ function mostrarOrden(){
     let botoncancel = document.createElement('button');
     botoncancel.className = 'btn btn-danger';
     botoncancel.setAttribute('id','botoncancelar');
-    botoncancel.setAttribute('data-toggle','modal');
-    botoncancel.setAttribute('data-target','#exampleModal');
+    botoncancel.setAttribute('data-bs-toggle','modal');
+    botoncancel.setAttribute('data-bs-target','#exampleModal');
     botoncancel.innerHTML = 'Cancel';
     colcancel.appendChild(botoncancel);
 

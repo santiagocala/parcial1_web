@@ -16,12 +16,17 @@
 hr.linea{
     border-top: 1px black;
 }
+.boton-movil{
+    background-color: orange;
+}
 #columnatarjeta{
     padding: 14px;
 }
 #zonagris {
     background-color: lightgray;
     border-color: gray;
+    padding: 20px;
+    margin: 10px;
 }
 #carrito {
     height: 50px;
@@ -30,7 +35,7 @@ hr.linea{
 #categoria-actual-movil{
     font-weight: bold;
 }
-#btn-dropdown{
+#dropdownMenuLink{
     background-color: orange;
     border-color: orange;
 }
@@ -43,6 +48,9 @@ hr.linea{
 }
 #titulo {
     font-family: Satisfy;
+}
+#botonconfirmar{
+    background-color: green;
 }
 #contenedor-categorias {
     font-size: 11px;
